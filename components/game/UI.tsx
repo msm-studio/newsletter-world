@@ -185,7 +185,7 @@ export function WinScreen({
               <span className="font-bold text-yellow-300">{score}</span>
             </div>
             <div className="flex justify-between text-white text-lg">
-              <span>Coins Collected:</span>
+              <span>💌 Emails:</span>
               <span className={isPerfectCollection ? 'font-bold text-yellow-300' : 'font-bold'}>
                 {coinsCollected}/{totalCoins} {isPerfectCollection && '🎉'}
               </span>

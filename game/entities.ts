@@ -790,46 +790,63 @@ export class Collectible {
     const time = Date.now() / 1000;
     const floatOffset = Math.sin(time * 3 + this.x * 0.01) * 3;
 
-    // Glow effect
+    // Glow effect - pink/magenta for love letter
     const glowGradient = ctx.createRadialGradient(
       this.x, this.y + floatOffset,
       0,
       this.x, this.y + floatOffset,
       this.width
     );
-    glowGradient.addColorStop(0, 'rgba(255, 215, 0, 0.8)');
-    glowGradient.addColorStop(0.5, 'rgba(255, 215, 0, 0.4)');
-    glowGradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+    glowGradient.addColorStop(0, 'rgba(255, 105, 180, 0.8)');
+    glowGradient.addColorStop(0.5, 'rgba(255, 105, 180, 0.4)');
+    glowGradient.addColorStop(1, 'rgba(255, 105, 180, 0)');
     ctx.fillStyle = glowGradient;
     ctx.beginPath();
     ctx.arc(this.x, this.y + floatOffset, this.width, 0, Math.PI * 2);
     ctx.fill();
 
-    // Coin body with gradient
-    const coinGradient = ctx.createRadialGradient(
-      this.x - 3, this.y + floatOffset - 3,
-      0,
-      this.x, this.y + floatOffset,
-      this.width / 2
-    );
-    coinGradient.addColorStop(0, '#FFD700');
-    coinGradient.addColorStop(0.5, '#FFA500');
-    coinGradient.addColorStop(1, '#FF8C00');
-    ctx.fillStyle = coinGradient;
+    // Envelope body
+    const envWidth = this.width * 1.2;
+    const envHeight = this.width * 0.8;
+    const envX = this.x - envWidth / 2;
+    const envY = this.y + floatOffset - envHeight / 2;
+
+    // Envelope background (cream/white)
+    ctx.fillStyle = '#FFF8DC';
+    ctx.fillRect(envX, envY, envWidth, envHeight);
+
+    // Envelope border
+    ctx.strokeStyle = '#DEB887';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(envX, envY, envWidth, envHeight);
+
+    // Envelope flap (triangle on top)
+    ctx.fillStyle = '#FFE4B5';
     ctx.beginPath();
-    ctx.arc(this.x, this.y + floatOffset, this.width / 2, 0, Math.PI * 2);
+    ctx.moveTo(envX, envY);
+    ctx.lineTo(this.x, envY + envHeight * 0.5);
+    ctx.lineTo(envX + envWidth, envY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Heart seal in center
+    const heartSize = 6;
+    const heartX = this.x;
+    const heartY = envY + envHeight * 0.35;
+    ctx.fillStyle = '#FF69B4';
+    ctx.beginPath();
+    ctx.moveTo(heartX, heartY + heartSize * 0.3);
+    ctx.bezierCurveTo(heartX, heartY, heartX - heartSize, heartY, heartX - heartSize, heartY + heartSize * 0.3);
+    ctx.bezierCurveTo(heartX - heartSize, heartY + heartSize * 0.6, heartX, heartY + heartSize, heartX, heartY + heartSize);
+    ctx.bezierCurveTo(heartX, heartY + heartSize, heartX + heartSize, heartY + heartSize * 0.6, heartX + heartSize, heartY + heartSize * 0.3);
+    ctx.bezierCurveTo(heartX + heartSize, heartY, heartX, heartY, heartX, heartY + heartSize * 0.3);
     ctx.fill();
 
-    // Inner circle detail
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+    // Sparkle effect
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.beginPath();
-    ctx.arc(this.x, this.y + floatOffset, this.width / 3, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Shine effect
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.beginPath();
-    ctx.arc(this.x - 2, this.y + floatOffset - 2, 3, 0, Math.PI * 2);
+    ctx.arc(envX + envWidth * 0.2, envY + 3, 2, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.restore();
