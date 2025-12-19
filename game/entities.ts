@@ -563,61 +563,85 @@ export class Goal {
     const time = Date.now() / 1000;
 
     // Platform surface is 20px below the goal box bottom (standard positioning)
-    // This matches how most levels position their goal boxes
     const platformY = this.y + this.height + 20;
-    const poleHeight = this.height;
+    const mailboxHeight = this.height;
 
-    // Pulsing scale effect centered on the flag pole
+    // Pulsing scale effect
     const scale = 0.95 + Math.sin(time * 2) * 0.05;
-    ctx.translate(this.x + this.width / 2, platformY - poleHeight / 2);
+    ctx.translate(this.x + this.width / 2, platformY - mailboxHeight / 2);
     ctx.scale(scale, scale);
-    ctx.translate(-(this.x + this.width / 2), -(platformY - poleHeight / 2));
+    ctx.translate(-(this.x + this.width / 2), -(platformY - mailboxHeight / 2));
 
-    // Flag pole base (small platform at surface level)
-    ctx.fillStyle = '#654321';
-    ctx.fillRect(this.x + this.width / 2 - 5, platformY - 4, 10, 4);
+    const centerX = this.x + this.width / 2;
+    const postHeight = mailboxHeight - 30;
 
-    // Flag pole with gradient - extends upward from platform surface
-    const poleGradient = ctx.createLinearGradient(
-      this.x + this.width / 2 - 3, platformY - poleHeight,
-      this.x + this.width / 2 + 3, platformY
-    );
-    poleGradient.addColorStop(0, '#6B3410');
-    poleGradient.addColorStop(0.5, '#8B4513');
-    poleGradient.addColorStop(1, '#6B3410');
-    ctx.fillStyle = poleGradient;
-    ctx.fillRect(this.x + this.width / 2 - 3, platformY - poleHeight, 6, poleHeight);
+    // WOODEN POST
+    ctx.fillStyle = '#8B6914';
+    ctx.fillRect(centerX - 4, platformY - postHeight, 8, postHeight);
+    ctx.strokeStyle = '#6B4F0A';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(centerX - 4, platformY - postHeight, 8, postHeight);
 
-    // Flag with gradient - at the top of the pole
-    const flagGradient = ctx.createLinearGradient(
-      this.x + this.width / 2, platformY - poleHeight + 5,
-      this.x + this.width / 2 + 30, platformY - poleHeight + 15
-    );
-    flagGradient.addColorStop(0, '#FFD700');
-    flagGradient.addColorStop(1, '#FFA500');
-    ctx.fillStyle = flagGradient;
+    // MAILBOX - simple blue rounded rectangle (side view)
+    const boxWidth = 45;
+    const boxHeight = 22;
+    const boxX = centerX - boxWidth / 2;
+    const boxY = platformY - postHeight - boxHeight - 2;
+
+    // Blue mailbox body
+    ctx.fillStyle = '#4A90D9';
     ctx.beginPath();
-    ctx.moveTo(this.x + this.width / 2, platformY - poleHeight + 5);
-    ctx.lineTo(this.x + this.width / 2 + 30, platformY - poleHeight + 15);
-    ctx.lineTo(this.x + this.width / 2, platformY - poleHeight + 25);
+    ctx.moveTo(boxX + 8, boxY + boxHeight);
+    ctx.lineTo(boxX + 8, boxY + 8);
+    ctx.arcTo(boxX + 8, boxY, boxX + boxWidth - 8, boxY, 8);
+    ctx.lineTo(boxX + boxWidth - 8, boxY);
+    ctx.arcTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + 8, 8);
+    ctx.lineTo(boxX + boxWidth, boxY + boxHeight);
     ctx.closePath();
     ctx.fill();
 
-    // Flag outline
-    ctx.strokeStyle = '#DAA520';
-    ctx.lineWidth = 1.5;
+    // Darker blue outline
+    ctx.strokeStyle = '#2E5C8A';
+    ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Rotating sparkle particles around the middle of the flag pole
+    // Front opening (dark)
+    ctx.fillStyle = '#1A3A5C';
+    ctx.beginPath();
+    ctx.moveTo(boxX + 10, boxY + boxHeight - 2);
+    ctx.lineTo(boxX + 10, boxY + 10);
+    ctx.arcTo(boxX + 10, boxY + 4, boxX + 20, boxY + 4, 6);
+    ctx.lineTo(boxX + 25, boxY + 4);
+    ctx.arcTo(boxX + 31, boxY + 4, boxX + 31, boxY + 10, 6);
+    ctx.lineTo(boxX + 31, boxY + boxHeight - 2);
+    ctx.closePath();
+    ctx.fill();
+
+    // RED FLAG on RIGHT side of mailbox
+    // Flag in DOWN position - hangs down along the mailbox side
+    ctx.fillStyle = '#DC2626';
+    const flagX = boxX + boxWidth - 3;
+    const flagTopY = boxY + 4;
+    // Flag pole/arm going DOWN
+    ctx.fillRect(flagX, flagTopY, 3, 16);
+    // Flag rectangle attached to bottom of arm
+    ctx.fillRect(flagX - 4, flagTopY + 10, 10, 7);
+    // Outline
+    ctx.strokeStyle = '#991B1B';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(flagX, flagTopY, 3, 16);
+    ctx.strokeRect(flagX - 4, flagTopY + 10, 10, 7);
+
+    // Rotating sparkle particles (gold)
     const sparkleCount = 6;
     for (let i = 0; i < sparkleCount; i++) {
       const angle = (time * 2 + (i / sparkleCount) * Math.PI * 2);
-      const radius = 25 + Math.sin(time * 3 + i) * 5;
-      const sparkleX = this.x + this.width / 2 + Math.cos(angle) * radius;
-      const sparkleY = platformY - poleHeight / 2 + Math.sin(angle) * radius;
+      const radius = 30 + Math.sin(time * 3 + i) * 5;
+      const sparkleX = centerX + Math.cos(angle) * radius;
+      const sparkleY = boxY + boxHeight / 2 + Math.sin(angle) * radius;
 
       const sparkleAlpha = Math.sin(time * 4 + i) * 0.3 + 0.7;
-      ctx.fillStyle = `rgba(255, 255, 0, ${sparkleAlpha})`;
+      ctx.fillStyle = `rgba(255, 215, 0, ${sparkleAlpha})`;
       ctx.beginPath();
       ctx.arc(sparkleX, sparkleY, 2, 0, Math.PI * 2);
       ctx.fill();
@@ -790,64 +814,67 @@ export class Collectible {
     const time = Date.now() / 1000;
     const floatOffset = Math.sin(time * 3 + this.x * 0.01) * 3;
 
-    // Glow effect - pink/magenta for love letter
+    // Glow effect - bright blue for email
     const glowGradient = ctx.createRadialGradient(
       this.x, this.y + floatOffset,
       0,
       this.x, this.y + floatOffset,
-      this.width
+      this.width * 1.3
     );
-    glowGradient.addColorStop(0, 'rgba(255, 105, 180, 0.8)');
-    glowGradient.addColorStop(0.5, 'rgba(255, 105, 180, 0.4)');
-    glowGradient.addColorStop(1, 'rgba(255, 105, 180, 0)');
+    glowGradient.addColorStop(0, 'rgba(59, 130, 246, 0.7)');
+    glowGradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.3)');
+    glowGradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
     ctx.fillStyle = glowGradient;
     ctx.beginPath();
-    ctx.arc(this.x, this.y + floatOffset, this.width, 0, Math.PI * 2);
+    ctx.arc(this.x, this.y + floatOffset, this.width * 1.3, 0, Math.PI * 2);
     ctx.fill();
 
-    // Envelope body
-    const envWidth = this.width * 1.2;
-    const envHeight = this.width * 0.8;
+    // Classic mail envelope
+    const envWidth = this.width * 1.4;
+    const envHeight = this.width * 0.9;
     const envX = this.x - envWidth / 2;
     const envY = this.y + floatOffset - envHeight / 2;
 
-    // Envelope background (cream/white)
-    ctx.fillStyle = '#FFF8DC';
+    // Envelope body - white with slight shadow
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetY = 2;
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(envX, envY, envWidth, envHeight);
+    ctx.shadowColor = 'transparent';
 
     // Envelope border
-    ctx.strokeStyle = '#DEB887';
+    ctx.strokeStyle = '#94A3B8';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(envX, envY, envWidth, envHeight);
 
-    // Envelope flap (triangle on top)
-    ctx.fillStyle = '#FFE4B5';
+    // Classic envelope V-flap lines (open envelope style)
+    ctx.strokeStyle = '#64748B';
+    ctx.lineWidth = 2;
     ctx.beginPath();
+    // Left diagonal
     ctx.moveTo(envX, envY);
-    ctx.lineTo(this.x, envY + envHeight * 0.5);
-    ctx.lineTo(envX + envWidth, envY);
-    ctx.closePath();
-    ctx.fill();
+    ctx.lineTo(this.x, envY + envHeight * 0.55);
+    // Right diagonal
+    ctx.moveTo(envX + envWidth, envY);
+    ctx.lineTo(this.x, envY + envHeight * 0.55);
     ctx.stroke();
 
-    // Heart seal in center
-    const heartSize = 6;
-    const heartX = this.x;
-    const heartY = envY + envHeight * 0.35;
-    ctx.fillStyle = '#FF69B4';
-    ctx.beginPath();
-    ctx.moveTo(heartX, heartY + heartSize * 0.3);
-    ctx.bezierCurveTo(heartX, heartY, heartX - heartSize, heartY, heartX - heartSize, heartY + heartSize * 0.3);
-    ctx.bezierCurveTo(heartX - heartSize, heartY + heartSize * 0.6, heartX, heartY + heartSize, heartX, heartY + heartSize);
-    ctx.bezierCurveTo(heartX, heartY + heartSize, heartX + heartSize, heartY + heartSize * 0.6, heartX + heartSize, heartY + heartSize * 0.3);
-    ctx.bezierCurveTo(heartX + heartSize, heartY, heartX, heartY, heartX, heartY + heartSize * 0.3);
-    ctx.fill();
+    // @ symbol in center (email indicator)
+    ctx.fillStyle = '#3B82F6';
+    ctx.font = 'bold 12px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('@', this.x, envY + envHeight * 0.75);
 
-    // Sparkle effect
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    // Sparkle/notification dot (top right)
+    ctx.fillStyle = '#EF4444';
     ctx.beginPath();
-    ctx.arc(envX + envWidth * 0.2, envY + 3, 2, 0, Math.PI * 2);
+    ctx.arc(envX + envWidth - 3, envY + 3, 4, 0, Math.PI * 2);
     ctx.fill();
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 6px Arial';
+    ctx.fillText('!', envX + envWidth - 3, envY + 4);
 
     ctx.restore();
   }

@@ -78,6 +78,17 @@ export interface LeaderboardEntry {
   created_at: string;
 }
 
+export interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  source: string;
+  level_completed: number;
+  character_name: string | null;
+  score: number;
+  created_at: string;
+}
+
 // Database queries
 export async function getCharacters(): Promise<Character[]> {
   const { data, error } = await supabase
@@ -166,5 +177,33 @@ export async function submitScore(
     return false;
   }
 
+  return true;
+}
+
+export async function submitLead(
+  name: string,
+  email: string,
+  characterName: string | null,
+  score: number,
+  levelCompleted: number = 1,
+  source: string = 'Newsletter World'
+): Promise<boolean> {
+  const { error } = await supabase
+    .from('leads')
+    .insert({
+      name: name,
+      email: email,
+      character_name: characterName,
+      score: score,
+      level_completed: levelCompleted,
+      source: source,
+    });
+
+  if (error) {
+    console.error('Error submitting lead to database:', error);
+    return false;
+  }
+
+  console.log('✅ Lead saved to database:', { name, email });
   return true;
 }

@@ -1,7 +1,7 @@
 # PROJECT_STATUS.md
 
 ## Overview
-Turt World is a whimsical 2D platformer game built with Next.js and TypeScript. Players choose from 4 unique characters (Turtle, Pig, Lemur, Pomeranian), each with distinct physics properties, and navigate through 5 progressively challenging themed levels. The game features a coin collection system with combos, a leaderboard for competitive play, and a level progression system that unlocks new levels as players complete previous ones. Data is stored in Supabase (PostgreSQL) and the game is deployed on Vercel.
+Newsletter World is a lead generation version of the Turt World platformer, built with Next.js and TypeScript. Players choose from 4 unique characters (Turtle, Pig, Lemur, Pomeranian), each with distinct physics properties, and navigate through 5 progressively challenging themed levels. The game features an **email collection system** (players collect email icons instead of coins), a **mandatory email gate** between Level 1 and Level 2 for lead capture, and a level progression system. Data is stored in Supabase (PostgreSQL), the game is deployed on Vercel, and leads are sent to a configurable webhook (Zapier-compatible).
 
 ## Architecture
 
@@ -15,7 +15,7 @@ Turt World is a whimsical 2D platformer game built with Next.js and TypeScript. 
 
 ### Directory Structure
 ```
-turt-world/
+newsletter-world/
 ├── app/                          # Next.js app router
 │   ├── page.tsx                  # Main game page
 │   ├── layout.tsx                # Root layout
@@ -26,10 +26,11 @@ turt-world/
 │   ├── Canvas.tsx                # Game rendering and animation loop
 │   ├── CharacterSelect.tsx       # Character selection UI
 │   ├── UI.tsx                    # In-game UI and win screen
+│   ├── EmailGate.tsx             # Email capture gate (NEW - between Level 1 & 2)
 │   └── Leaderboard.tsx           # Leaderboard display
 ├── game/                         # Core game logic (TypeScript)
 │   ├── physics.ts                # Custom physics engine
-│   ├── entities.ts               # Player entity and game objects
+│   ├── entities.ts               # Player entity and game objects (emails + mailbox)
 │   ├── levels.ts                 # Level manager and rendering
 │   ├── animation.ts              # Character animations
 │   ├── camera.ts                 # Camera following logic
@@ -37,7 +38,8 @@ turt-world/
 │   └── audio.ts                  # Audio manager (Web Audio API)
 ├── db/                           # Database layer
 │   ├── supabase.ts               # Supabase client and queries
-│   └── schema.sql                # Database schema definition
+│   ├── schema.sql                # Database schema definition
+│   └── setup-database.js         # Database initialization script (NEW)
 └── [helper scripts]              # Various Node.js scripts for DB management
 ```
 
@@ -56,15 +58,18 @@ turt-world/
 ## Current State
 
 ### ✅ Working Features
+- **Email Gate (Lead Capture)**: Mandatory form between Level 1 and Level 2 collecting Name + Email, sent to configurable webhook
+- **Email Collection System**: Players collect email icons (💌) instead of coins - same scoring mechanics
+- **Mailbox Goal**: Levels end at a mailbox instead of a flag
 - **Character Selection**: 4 characters (Turtle, Pig, Lemur, Pomeranian) with unique physics (speed, jump force, mass, air control, float time)
 - **5 Themed Levels** (in order):
-  1. Arctic Adventure (arctic theme) - 30 coins, unlocked by default
-  2. Sandy Scramble (desert theme) - 35 coins
-  3. Jungle Jump (jungle theme) - 40 coins
-  4. Seaside Sprint (seaside theme) - 45 coins
-  5. Mountain Madness (mountain theme) - 50 coins
+  1. Arctic Adventure (arctic theme) - 30 emails, unlocked by default
+  2. Sandy Scramble (desert theme) - 35 emails
+  3. Jungle Jump (jungle theme) - 40 emails
+  4. Seaside Sprint (seaside theme) - 45 emails
+  5. Mountain Madness (mountain theme) - 50 emails
 - **Level Progression**: Players unlock next level by completing the current level
-- **Coin Collection System**: Collect coins for points with jump combo multipliers
+- **Email Collection System**: Collect emails for points with jump combo multipliers
 - **Scoring System**:
   - Jump combos (2+ coins = 2x points, 3+ = 3x, etc.)
   - Perfect level bonus (5,000 points)
@@ -90,15 +95,19 @@ turt-world/
 - **Database Scripts**: Helper scripts organized in `scripts/` directory with environment variable support
 
 ### 🚧 In Progress
-- None currently
+- **Mailbox visual refinement**: Current design may need polish
 
 ### 📋 Planned/Potential Features
+- Configure Zapier webhook URL for production lead capture
+- Additional branding customization (title screens, colors)
+- A/B testing different email gate copy
+- Analytics integration for conversion tracking
 - Power-ups or special abilities
 - Additional levels (more themes: Volcano, Space, Underwater)
 - Mobile/touch controls optimization
 - Multiplayer or time trial modes
 - More character animations (hurt, celebration, landing squash)
-- Particle effects for coins and combos
+- Particle effects for emails and combos
 - Background parallax layers with more detail
 - Level unlock sound effect
 
@@ -117,7 +126,132 @@ turt-world/
 - None currently
 
 ## Recent Work
-_Last updated: 2025-12-13 (Session 7)_
+_Last updated: 2025-12-19 (Session 8)_
+
+### Session 8: Newsletter World Clone & Lead Generation Features
+**Date**: December 19, 2025
+
+#### Overview
+Created Newsletter World as a lead generation clone of Turt World with email gate, visual reskinning (coins→emails, flag→mailbox), and new Supabase project infrastructure.
+
+#### Project Infrastructure Setup
+**Actions Taken**:
+- Cloned Turt World project to new `newsletter-world` folder
+- Removed old `.git` and `.vercel` directories
+- Initialized fresh Git repository
+- Updated `package.json` name from `turt-world` to `newsletter-world`
+- Created new Supabase project (`bvnjiamypyvxtdpvnfea`)
+- Created `db/setup-database.js` script to initialize database schema and data
+- Synced database with exact Turt World data (Pomeranian character, correct level order with Arctic first)
+- Deployed to Vercel (new project)
+
+**Files Created/Modified**:
+- `package.json` - Changed name to `newsletter-world`
+- `.env.local` - New Supabase credentials + webhook URL placeholder
+- `db/setup-database.js` - NEW FILE for database initialization
+
+#### Supabase Row Level Security (RLS) Fix
+**Problem**: Vercel deployment showed "Failed to load game data" error.
+
+**Root Cause**: New Supabase project had RLS enabled by default but no policies allowing public read access.
+
+**Solution**: Added RLS policies via Supabase SQL Editor:
+```sql
+ALTER TABLE characters ENABLE ROW LEVEL SECURITY;
+ALTER TABLE levels ENABLE ROW LEVEL SECURITY;
+ALTER TABLE leaderboard ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read access" ON characters FOR SELECT USING (true);
+CREATE POLICY "Allow public read access" ON levels FOR SELECT USING (true);
+CREATE POLICY "Allow public read access" ON leaderboard FOR SELECT USING (true);
+CREATE POLICY "Allow public insert access" ON leaderboard FOR INSERT WITH CHECK (true);
+```
+
+#### Email Gate Implementation (Lead Capture)
+**Feature**: Mandatory email gate between Level 1 and Level 2 that captures Name + Email.
+
+**Files Created**:
+- `components/game/EmailGate.tsx` - NEW FILE
+  - Form with name and email inputs
+  - Validation (required fields, email format)
+  - Submits to configurable webhook (Zapier-compatible)
+  - Stores submission in localStorage to prevent re-showing
+
+**Files Modified**:
+- `components/game/Game.tsx`:
+  - Added `'email-gate'` to gameState type
+  - Added `emailSubmitted` state with localStorage persistence (`newsletter-world-email-submitted`)
+  - Modified `handleNextLevel` to show email gate after Level 1 if not submitted
+  - Added `handleEmailSubmit` function to process form and send to webhook
+  - Added `submitLeadToWebhook` function for webhook POST request
+  - Added EmailGate render block
+
+**Webhook Payload Format**:
+```json
+{
+  "name": "Player Name",
+  "email": "player@example.com",
+  "source": "Newsletter World",
+  "level_completed": 1,
+  "character": "Turtle",
+  "score": 1234,
+  "timestamp": "2025-12-19T12:00:00.000Z"
+}
+```
+
+#### Visual Reskin: Coins → Emails
+**Change**: Replaced coin collectibles with email icons.
+
+**Files Modified**:
+- `game/entities.ts` (Collectible class render method):
+  - Replaced gold coin rendering with email envelope icon
+  - White envelope shape with blue glow
+  - Red @ symbol in center
+  - Red notification badge in top-right corner
+  - Pulsing animation maintained
+
+- `components/game/UI.tsx`:
+  - Changed "Coins Collected:" to "💌 Emails:" on win screen
+
+#### Visual Reskin: Flag → Mailbox
+**Change**: Replaced finish line flag with classic US-style mailbox.
+
+**Files Modified**:
+- `game/entities.ts` (Goal class render method):
+  - Replaced flag pole rendering with mailbox on post
+  - Wooden post (brown, tall)
+  - Blue rounded mailbox body
+  - Red flag on side in DOWN position (indicating no outgoing mail)
+  - **Note**: Mailbox design may need further refinement
+
+#### LocalStorage Key Updates
+**Files Modified** (search-replace `turt-world` → `newsletter-world`):
+- `game/audio.ts` - `newsletter-world-muted`
+- `components/game/UI.tsx` - `newsletter-world-muted`
+- `components/game/Game.tsx` - `newsletter-world-unlocked-level`, `newsletter-world-selected-level`, `newsletter-world-email-submitted`
+- `components/game/MobileTouchControls.tsx` - `newsletter-world-muted`
+
+#### Summary of All Files Modified
+1. **`package.json`** - Name change
+2. **`.env.local`** - New Supabase credentials
+3. **`db/setup-database.js`** - NEW FILE for database init
+4. **`components/game/EmailGate.tsx`** - NEW FILE for email capture
+5. **`components/game/Game.tsx`** - Email gate state, handlers, render
+6. **`components/game/UI.tsx`** - "💌 Emails:" text, localStorage key
+7. **`game/entities.ts`** - Email collectible render, mailbox goal render
+8. **`game/audio.ts`** - localStorage key
+9. **`components/game/MobileTouchControls.tsx`** - localStorage key
+
+#### Deployment
+- Successfully deployed to Vercel
+- RLS policies enabled for public read access
+- Dev server running locally on http://localhost:3000
+
+#### Known Issues / Open Items
+1. **Mailbox visual design**: May need further refinement - current design is functional but user expressed some dissatisfaction with appearance
+2. **Webhook URL**: Currently empty in `.env.local` - needs Zapier webhook URL configured for production use
+
+---
 
 ### Session 7: Game Over System, Death Sounds & Pomeranian Overhaul
 **Date**: December 13, 2025
@@ -741,47 +875,49 @@ numSegments = Math.ceil(parallaxWidth / segmentWidth) + buffer
 
 ## Next Priorities
 
-1. **Test on actual mobile devices**:
-   - Verify touch controls, audio (unmute flow), and quit button work on iOS Safari and Android Chrome
-   - Test Pomeranian's new speedy physics feel good on mobile
+1. **Configure Webhook for Production**:
+   - Set up Zapier webhook (or alternative like Make.com, n8n)
+   - Add webhook URL to Vercel environment variables
+   - Test full lead capture flow end-to-end
+   - Connect to email marketing platform (Mailchimp, ConvertKit, etc.)
+
+2. **Refine Mailbox Visual**:
+   - Polish the mailbox goal design based on user feedback
+   - Consider adding animation (flag rising when player approaches)
+
+3. **Test Email Gate Flow**:
+   - Test on mobile devices (iOS Safari, Android Chrome)
+   - Verify form validation and submission
+   - Test localStorage persistence (gate doesn't reappear after submission)
+
+4. **Branding Updates**:
+   - Update game title from "Turt World" references to "Newsletter World"
+   - Consider custom branding colors for client deployments
+
+5. **Analytics & Conversion Tracking**:
+   - Add Google Analytics or similar
+   - Track: Level 1 completion rate, email gate conversion rate, Level 2+ engagement
+
+6. **Test on actual mobile devices**:
+   - Verify touch controls, audio (unmute flow), and quit button work
    - Test Game Over screen and death/game over sounds
    - Confirm combo system works correctly (per-jump counting)
 
-2. **Consider additional audio polish**:
-   - Add hazard collision sound (optional - could be too noisy)
-   - Add sound for unlocking new level
-   - Volume sliders instead of just mute toggle
-
-3. **Consider additional visual polish**:
-   - Add particle effects for coin collection (sparkles)
+7. **Consider additional visual polish**:
+   - Add particle effects for email collection (sparkles)
    - Add particle effects for combo milestones (2x, 3x, etc.)
-   - Add screen shake or visual feedback for hazard collisions
-   - Add celebration animation at goal
+   - Add celebration animation at mailbox goal
 
-5. **Consider removing Rapier2D**: Package is installed but not used - could reduce bundle size (~500KB)
+8. **Consider removing Rapier2D**: Package is installed but not used - could reduce bundle size (~500KB)
 
-6. **Add more levels**: Create 5-10 additional themed levels
+9. **Add more levels**: Create 5-10 additional themed levels
    - Potential themes: Volcano, Ice Cave, Space, Underwater, Forest
    - Each needs unique music in appropriate key/mode
 
-7. **Enhance animations**: Add more character animation states
-   - Death/respawn animation
-   - Celebration animation at goal
-   - Landing squash/stretch
-
-8. **Improve leaderboard**: Add filtering by level, character, or time period
-   - Add "perfect run" indicator (all coins collected)
-   - Show combo stats on leaderboard
-
-9. **Add automated tests**: Unit tests for game logic, E2E tests for gameplay
+10. **Add automated tests**: Unit tests for game logic, E2E tests for gameplay
     - Test scoring calculations (especially combo multipliers)
-    - Test audio initialization and playback
+    - Test email gate submission and localStorage
     - Test cross-level score persistence
-
-10. **Mobile Portrait Mode** (Plan exists from Session 5):
-    - Plan file: `~/.claude/plans/dapper-percolating-beaver.md`
-    - Full-screen portrait, auto-run, tap-to-jump
-    - Lower priority now that current mobile controls work
 
 ## Key Decisions
 

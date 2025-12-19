@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Character, Level, LeaderboardEntry, getCharacters, getLevels, getTopScores, submitScore } from '@/db/supabase';
+import { Character, Level, LeaderboardEntry, getCharacters, getLevels, getTopScores, submitScore, submitLead } from '@/db/supabase';
 import { InputManager } from '@/game/input';
 import { getAudioManager } from '@/game/audio';
 import CharacterSelect from './CharacterSelect';
@@ -426,7 +426,26 @@ export default function Game() {
 
   // Handle email submission from the email gate
   const handleEmailSubmit = async (name: string, email: string) => {
+    // Save to database (primary storage)
+    const dbSuccess = await submitLead(
+      name,
+      email,
+      selectedCharacter?.name || null,
+      score,
+      1, // Level completed
+      'Newsletter World'
+    );
+
+    // Also send to webhook if configured (for marketing automation)
     await submitLeadToWebhook(name, email);
+
+    if (dbSuccess) {
+      console.log('✅ Lead captured successfully');
+    } else {
+      console.warn('⚠️ Lead saved to webhook but database insert failed');
+    }
+
+    // Mark as submitted and continue to next level
     localStorage.setItem('newsletter-world-email-submitted', 'true');
     setEmailSubmitted(true);
     setGameState('playing');

@@ -16,21 +16,50 @@ export default function EmailGate({ character, level, score, onSubmit }: EmailGa
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+  const validateEmail = (email: string): boolean => {
+    // RFC 5322 compliant email regex (simplified but robust)
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim()) {
-      setError('Please fill in all fields');
+
+    // Trim inputs
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+
+    // Validate name
+    if (!trimmedName) {
+      setError('Please enter your name');
       return;
     }
-    if (!email.includes('@') || !email.includes('.')) {
-      setError('Please enter a valid email');
+    if (trimmedName.length < 2) {
+      setError('Please enter a valid name');
+      return;
+    }
+
+    // Validate email
+    if (!trimmedEmail) {
+      setError('Please enter your email address');
+      return;
+    }
+    if (!validateEmail(trimmedEmail)) {
+      setError('Please enter a valid email address (e.g., name@example.com)');
+      return;
+    }
+
+    // Check for common typos in email domains
+    const commonTypos = ['gmail.con', 'gmail.cm', 'yahoo.con', 'hotmail.con'];
+    if (commonTypos.some(typo => trimmedEmail.includes(typo))) {
+      setError('Please check your email address for typos');
       return;
     }
 
     setIsSubmitting(true);
     setError('');
     try {
-      await onSubmit(name.trim(), email.trim());
+      await onSubmit(trimmedName, trimmedEmail);
     } catch (err) {
       console.error('Email submission error:', err);
       setError('Something went wrong. Please try again.');
