@@ -16,17 +16,17 @@ interface CharacterSelectProps {
 }
 
 const characterColors: Record<string, string> = {
-  Turtle: 'bg-green-600 hover:bg-green-700',
-  Pig: 'bg-pink-400 hover:bg-pink-500',
-  Lemur: 'bg-amber-700 hover:bg-amber-800',
-  Pomeranian: 'bg-orange-400 hover:bg-orange-500',
+  'Transactional Turtle': 'bg-green-600 hover:bg-green-700',
+  'Postmaster Pig': 'bg-pink-400 hover:bg-pink-500',
+  'Letter Lemur': 'bg-amber-700 hover:bg-amber-800',
+  'Deliverability Dog': 'bg-orange-400 hover:bg-orange-500',
 };
 
 const characterEmojis: Record<string, string> = {
-  Turtle: '🐢',
-  Pig: '🐷',
-  Lemur: '🐵',
-  Pomeranian: '🐶',
+  'Transactional Turtle': '🐢',
+  'Postmaster Pig': '🐷',
+  'Letter Lemur': '🐵',
+  'Deliverability Dog': '🐶',
 };
 
 export default function CharacterSelect({

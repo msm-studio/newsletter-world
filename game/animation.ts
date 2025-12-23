@@ -113,13 +113,13 @@ export function drawCharacterSprite(
   ctx.shadowOffsetY = 2;
 
   // Character-specific rendering
-  if (characterName === 'Turtle') {
+  if (characterName === 'Transactional Turtle') {
     drawTurtle(ctx, x, y, width, height, isBlinking);
-  } else if (characterName === 'Pig') {
+  } else if (characterName === 'Postmaster Pig') {
     drawPig(ctx, x, y, width, height, isBlinking);
-  } else if (characterName === 'Lemur') {
+  } else if (characterName === 'Letter Lemur') {
     drawLemur(ctx, x, y, width, height, isBlinking, frameIndex);
-  } else if (characterName === 'Pomeranian') {
+  } else if (characterName === 'Deliverability Dog') {
     drawPomeranian(ctx, x, y, width, height, isBlinking, frameIndex);
   }
 

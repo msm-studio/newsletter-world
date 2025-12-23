@@ -6,10 +6,10 @@ import { getAudioManager } from '@/game/audio';
 
 // Character emoji mapping for lives display
 const characterLivesEmoji: Record<string, string> = {
-  Turtle: '🐢',
-  Pig: '🐷',
-  Lemur: '🐵',
-  Pomeranian: '🐶',
+  'Transactional Turtle': '🐢',
+  'Postmaster Pig': '🐷',
+  'Letter Lemur': '🐵',
+  'Deliverability Dog': '🐶',
 };
 
 interface GameUIProps {
