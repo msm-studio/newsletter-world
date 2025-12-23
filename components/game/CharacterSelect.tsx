@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Character, LeaderboardEntry, Level } from '@/db/supabase';
 import Leaderboard from './Leaderboard';
 
@@ -38,6 +39,7 @@ export default function CharacterSelect({
   onLevelSelect,
   isDevMode,
 }: CharacterSelectProps) {
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-400 to-orange-300 flex flex-col items-center justify-start p-8 py-12">
@@ -90,9 +92,29 @@ export default function CharacterSelect({
         </div>
       )}
 
-      <div className="w-full max-w-4xl">
-        <Leaderboard entries={topScores} />
-      </div>
+      <button
+        onClick={() => setShowLeaderboard(true)}
+        className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-full shadow-2xl transform transition-all hover:scale-105 active:scale-95"
+      >
+        🏆 View Leaderboard
+      </button>
+
+      {showLeaderboard && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowLeaderboard(false)}
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            <Leaderboard entries={topScores} />
+            <button
+              onClick={() => setShowLeaderboard(false)}
+              className="mt-4 w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
