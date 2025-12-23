@@ -186,7 +186,7 @@ export async function submitLead(
   characterName: string | null,
   score: number,
   levelCompleted: number = 1,
-  source: string = 'Newsletter World'
+  source: string = 'Newsletter Enthusiast'
 ): Promise<boolean> {
   const { error } = await supabase
     .from('leads')

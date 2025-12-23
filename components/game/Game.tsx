@@ -411,7 +411,7 @@ export default function Game() {
         body: JSON.stringify({
           name,
           email,
-          source: 'Newsletter World',
+          source: 'Newsletter Enthusiast',
           level_completed: 1,
           character: selectedCharacter?.name,
           score: score,
@@ -433,7 +433,7 @@ export default function Game() {
       selectedCharacter?.name || null,
       score,
       1, // Level completed
-      'Newsletter World'
+      'Newsletter Enthusiast'
     );
 
     // Also send to webhook if configured (for marketing automation)
@@ -454,7 +454,7 @@ export default function Game() {
   if (gameState === 'loading') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-400 to-orange-300 flex items-center justify-center">
-        <div className="text-4xl font-bold text-white">Loading Newsletter World...</div>
+        <div className="text-4xl font-bold text-white">Loading Newsletter Enthusiast...</div>
       </div>
     );
   }

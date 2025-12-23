@@ -45,7 +45,7 @@ export default function CharacterSelect({
     <div className="min-h-screen bg-gradient-to-b from-blue-400 to-orange-300 flex flex-col items-center justify-center p-8">
       <div className="text-center mb-12">
         <h1 className="text-6xl font-bold text-white mb-4 drop-shadow-lg">
-          Newsletter World
+          Newsletter Enthusiast
         </h1>
         <p className="text-2xl text-white drop-shadow">Choose Your Character</p>
       </div>
