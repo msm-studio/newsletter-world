@@ -89,23 +89,6 @@ export default function CharacterSelect({
             <div className="text-7xl mb-2">{characterEmojis[character.name] || '🦔'}</div>
             <h2 className="text-3xl font-bold">{character.name}</h2>
             <p className="text-sm opacity-90 text-center">{character.description}</p>
-
-            <div className="mt-4 w-full bg-black bg-opacity-40 rounded-lg p-3 text-xs space-y-1 border border-white border-opacity-30">
-              <div className="flex justify-between">
-                <span>Speed:</span>
-                <span className="font-bold">{character.speed.toFixed(1)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Jump:</span>
-                <span className="font-bold">{character.jump_force.toFixed(1)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Air Control:</span>
-                <span className="font-bold">
-                  {(character.air_control * 100).toFixed(0)}%
-                </span>
-              </div>
-            </div>
           </button>
         ))}
       </div>
