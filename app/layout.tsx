@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Newsletter Enthusiast - Platformer Game",
+  title: "Newsletter Enthusiast - Deliver them all!",
   description: "A fun platformer game with unique characters and themed levels. Collect emails and navigate through Arctic, Desert, Jungle, Seaside, and Mountain levels!",
   appleWebApp: {
     capable: true,
