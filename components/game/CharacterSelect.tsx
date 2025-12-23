@@ -48,6 +48,21 @@ export default function CharacterSelect({
         <p className="text-3xl text-white drop-shadow font-bold">Deliver them all!</p>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mb-8">
+        {characters.map((character) => (
+          <button
+            key={character.id}
+            onClick={() => onSelect(character)}
+            className={`${
+              characterColors[character.name] || 'bg-gray-600 hover:bg-gray-700'
+            } text-white rounded-2xl p-8 shadow-2xl transform transition-all hover:scale-105 active:scale-95 flex flex-col items-center gap-4 min-w-[200px]`}
+          >
+            <div className="text-7xl mb-2">{characterEmojis[character.name] || '🦔'}</div>
+            <h2 className="text-3xl font-bold">{character.name}</h2>
+            <p className="text-sm opacity-90 text-center">{character.description}</p>
+          </button>
+        ))}
+      </div>
 
       {/* Level Selector (Testing Mode) */}
       {levels.length > 0 && (
@@ -74,22 +89,6 @@ export default function CharacterSelect({
           </div>
         </div>
       )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mb-12">
-        {characters.map((character) => (
-          <button
-            key={character.id}
-            onClick={() => onSelect(character)}
-            className={`${
-              characterColors[character.name] || 'bg-gray-600 hover:bg-gray-700'
-            } text-white rounded-2xl p-8 shadow-2xl transform transition-all hover:scale-105 active:scale-95 flex flex-col items-center gap-4 min-w-[200px]`}
-          >
-            <div className="text-7xl mb-2">{characterEmojis[character.name] || '🦔'}</div>
-            <h2 className="text-3xl font-bold">{character.name}</h2>
-            <p className="text-sm opacity-90 text-center">{character.description}</p>
-          </button>
-        ))}
-      </div>
 
       <div className="w-full max-w-4xl">
         <Leaderboard entries={topScores} />
