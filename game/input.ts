@@ -14,6 +14,12 @@ export class InputManager {
   }
 
   private handleKeyDown = (e: KeyboardEvent) => {
+    // Don't capture input if user is typing in a form field
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+      return;
+    }
+
     // Prevent default browser behavior for arrow keys and space
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
       e.preventDefault();
@@ -26,6 +32,12 @@ export class InputManager {
   };
 
   private handleKeyUp = (e: KeyboardEvent) => {
+    // Don't capture input if user is typing in a form field
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+      return;
+    }
+
     // Prevent default browser behavior
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
       e.preventDefault();
