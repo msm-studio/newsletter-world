@@ -21,6 +21,27 @@ const bungee = Bungee({
 export const metadata: Metadata = {
   title: "Newsletter Enthusiast - Deliver them all!",
   description: "A fun platformer game with unique characters and themed levels. Collect emails and navigate through Arctic, Desert, Jungle, Seaside, and Mountain levels!",
+  openGraph: {
+    title: "Newsletter Enthusiast - Deliver them all!",
+    description: "A fun platformer game with unique characters and themed levels. Collect emails and navigate through Arctic, Desert, Jungle, Seaside, and Mountain levels!",
+    url: "https://newsletter-world.vercel.app",
+    siteName: "Newsletter Enthusiast",
+    images: [
+      {
+        url: "/social-share.png",
+        width: 1200,
+        height: 630,
+        alt: "Newsletter Enthusiast - Platformer Game",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Newsletter Enthusiast - Deliver them all!",
+    description: "A fun platformer game with unique characters and themed levels. Collect emails and navigate through Arctic, Desert, Jungle, Seaside, and Mountain levels!",
+    images: ["/social-share.png"],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
