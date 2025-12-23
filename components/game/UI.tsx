@@ -212,6 +212,8 @@ export function WinScreen({
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
+                onKeyDown={(e) => e.stopPropagation()}
+                onKeyUp={(e) => e.stopPropagation()}
                 placeholder="Enter your name"
                 className="w-full px-4 py-2 rounded-lg mb-2 text-gray-800"
                 maxLength={20}
