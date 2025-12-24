@@ -65,6 +65,10 @@ export default function CharacterSelect({
         <p className="text-3xl text-white drop-shadow font-bold">Deliver them all!</p>
       </div>
 
+      <h2 className="text-3xl font-bold text-white mb-6 text-center drop-shadow-lg">
+        Select Your Character
+      </h2>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mb-8">
         {characters.map((character) => (
           <button
