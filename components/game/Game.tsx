@@ -33,6 +33,7 @@ export default function Game() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [totalCoinsCollected, setTotalCoinsCollected] = useState(0); // Total coins across all levels
   const [allCoinsCollected, setAllCoinsCollected] = useState(false); // Track if all coins in game collected
+  const [startedFromLevel1, setStartedFromLevel1] = useState(false); // Track if player started from Level 1
   const [unlockedLevelIndex, setUnlockedLevelIndex] = useState(() => {
     // Load from localStorage on initial mount
     if (typeof window !== 'undefined') {
@@ -187,6 +188,7 @@ export default function Game() {
     setMaxCombo(0);
     setTotalCoinsCollected(0); // Reset total coins for new run
     setAllCoinsCollected(false); // Reset all coins bonus flag
+    setStartedFromLevel1(selectedLevelIndex === 0); // Track if starting from Level 1
     setGameState('playing');
   };
 
@@ -220,8 +222,12 @@ export default function Game() {
       setAllCoinsCollected(true);
     }
 
-    // Add base score + level score + level bonus + all coins bonus
-    setScore(baseScore + finalScore + levelBonus + allCoinsBonus);
+    // Award 5,000 points per remaining life if completing final level after starting from Level 1
+    const isFinalLevel = selectedLevelIndex === levels.length - 1;
+    const livesBonus = (isFinalLevel && startedFromLevel1) ? lives * 5000 : 0;
+
+    // Add base score + level score + level bonus + all coins bonus + lives bonus
+    setScore(baseScore + finalScore + levelBonus + allCoinsBonus + livesBonus);
     setCoinsCollected(coins);
     setTotalCoins(total);
     setMaxCombo(combo);
@@ -271,6 +277,7 @@ export default function Game() {
     setMaxCombo(0);
     setTotalCoinsCollected(0);
     setAllCoinsCollected(false);
+    setStartedFromLevel1(true); // Starting from Level 1
     setSelectedLevelIndex(0); // Reset to Level 1
     setCurrentLevel(levels[0]); // Reset to Level 1
     setGameState('playing');
@@ -287,6 +294,7 @@ export default function Game() {
     setMaxCombo(0);
     setTotalCoinsCollected(0);
     setAllCoinsCollected(false);
+    setStartedFromLevel1(true); // Starting from Level 1
     setSelectedLevelIndex(0);
     setCurrentLevel(levels[0]);
     setGameState('playing');
@@ -308,6 +316,7 @@ export default function Game() {
     setBaseScore(0); // Reset base score when returning to main menu
     setTotalCoinsCollected(0); // Reset total coins collected
     setAllCoinsCollected(false); // Reset all coins bonus flag
+    setStartedFromLevel1(false); // Reset level 1 tracking
     setSelectedLevelIndex(0); // Reset to Level 1
     setCurrentLevel(levels[0]); // Reset to Level 1
     // Reload leaderboard to show any new scores
