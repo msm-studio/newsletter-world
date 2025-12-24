@@ -106,7 +106,6 @@ export default function CharacterSelect({
               >
                 <div className="text-lg">Level {index + 1}</div>
                 <div className="text-base">{level.name}</div>
-                <div className="text-sm opacity-80 capitalize">{level.theme}</div>
               </button>
             ))}
           </div>
