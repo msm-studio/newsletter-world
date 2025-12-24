@@ -89,11 +89,11 @@ export default function CharacterSelect({
 
       {/* Level Selector (Visible in dev mode or after email registration) */}
       {(isDevMode || emailSubmitted) && levels.length > 0 && (
-        <div className="mb-8 bg-gray-800 bg-opacity-90 backdrop-blur rounded-2xl p-6 max-w-2xl border-2 border-yellow-400">
+        <div className="mb-8 bg-gray-800 bg-opacity-90 backdrop-blur rounded-2xl p-6 max-w-4xl border-2 border-yellow-400">
           <h2 className="text-2xl font-bold text-yellow-400 mb-4 text-center">
             Select Level
           </h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 md:flex md:flex-wrap md:justify-center gap-4">
             {levels.map((level, index) => (
               <button
                 key={level.id}
