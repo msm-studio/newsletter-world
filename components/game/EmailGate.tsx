@@ -144,7 +144,7 @@ export default function EmailGate({ character, level, score, onSubmit }: EmailGa
           </form>
 
           <p className="text-white/50 text-xs mt-4">
-            We&apos;ll send you tips & updates. Unsubscribe anytime.
+            We&apos;ll send you newsletter tips & updates. Unsubscribe anytime.
           </p>
         </div>
       </div>
