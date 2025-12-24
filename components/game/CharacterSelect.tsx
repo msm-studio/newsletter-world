@@ -119,7 +119,7 @@ export default function CharacterSelect({
       </button>
 
       {/* Social Sharing */}
-      <div className="text-center">
+      <div className="text-center mb-8">
         <p className="text-white text-xl mb-4 font-semibold">
           Share with a fellow newsletter enthusiast! 💌
         </p>
@@ -152,6 +152,13 @@ export default function CharacterSelect({
             X
           </button>
         </div>
+      </div>
+
+      {/* Play Instructions (Desktop Only) */}
+      <div className="hidden md:block text-center bg-gray-800 bg-opacity-60 rounded-lg px-6 py-3 max-w-md">
+        <p className="text-white text-sm">
+          <span className="font-semibold">Controls:</span> Arrow Keys or WASD to move & jump • Q to quit
+        </p>
       </div>
 
       {showLeaderboard && (
