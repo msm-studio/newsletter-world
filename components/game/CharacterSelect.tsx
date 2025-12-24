@@ -87,6 +87,13 @@ export default function CharacterSelect({
         ))}
       </div>
 
+      {/* Play Instructions (Desktop Only) */}
+      <div className="hidden md:block text-center bg-gray-800 bg-opacity-60 rounded-lg px-6 py-3 max-w-md mb-8">
+        <p className="text-white text-sm">
+          <span className="font-semibold">Controls:</span> Arrow Keys or WASD to move & jump • Q to quit
+        </p>
+      </div>
+
       {/* Level Selector (Visible in dev mode or after email registration) */}
       {(isDevMode || emailSubmitted) && levels.length > 0 && (
         <div className="mb-8 bg-gray-800 bg-opacity-90 backdrop-blur rounded-2xl p-6 max-w-4xl border-2 border-yellow-400">
@@ -111,13 +118,6 @@ export default function CharacterSelect({
           </div>
         </div>
       )}
-
-      {/* Play Instructions (Desktop Only) */}
-      <div className="hidden md:block text-center bg-gray-800 bg-opacity-60 rounded-lg px-6 py-3 max-w-md mb-8">
-        <p className="text-white text-sm">
-          <span className="font-semibold">Controls:</span> Arrow Keys or WASD to move & jump • Q to quit
-        </p>
-      </div>
 
       <button
         onClick={() => setShowLeaderboard(true)}
