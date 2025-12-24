@@ -32,12 +32,12 @@ export default function Leaderboard({ entries }: LeaderboardProps) {
             key={entry.id}
             className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
               index === 0
-                ? 'bg-yellow-600 bg-opacity-50 border-2 border-yellow-400'
+                ? 'bg-yellow-700 bg-opacity-80 border-2 border-yellow-400'
                 : index === 1
-                ? 'bg-gray-600 bg-opacity-50 border-2 border-gray-400'
+                ? 'bg-gray-700 bg-opacity-80 border-2 border-gray-400'
                 : index === 2
-                ? 'bg-orange-700 bg-opacity-50 border-2 border-orange-500'
-                : 'bg-gray-700 bg-opacity-50'
+                ? 'bg-orange-800 bg-opacity-80 border-2 border-orange-500'
+                : 'bg-gray-800 bg-opacity-80'
             }`}
           >
             <div className="flex-shrink-0 w-8 text-center">
