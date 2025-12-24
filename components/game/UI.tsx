@@ -277,6 +277,7 @@ interface GameOverScreenProps {
   onRestart: () => void;
   onRestartGame: () => void;
   onMainMenu: () => void;
+  onSubmitScore?: (playerName: string) => void;
   isFirstLevel?: boolean;
 }
 
@@ -287,9 +288,19 @@ export function GameOverScreen({
   onRestart,
   onRestartGame,
   onMainMenu,
+  onSubmitScore,
   isFirstLevel = false,
 }: GameOverScreenProps) {
+  const [playerName, setPlayerName] = useState('');
+  const [scoreSubmitted, setScoreSubmitted] = useState(false);
   const emoji = characterLivesEmoji[character.name] || '💀';
+
+  const handleSubmit = () => {
+    if (playerName.trim() && onSubmitScore) {
+      onSubmitScore(playerName.trim());
+      setScoreSubmitted(true);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
@@ -313,6 +324,32 @@ export function GameOverScreen({
               <span className="font-bold text-yellow-300">{score.toLocaleString()}</span>
             </div>
           </div>
+
+          {scoreSubmitted && (
+            <p className="text-white mb-4">Score submitted! Thanks for playing!</p>
+          )}
+
+          {!scoreSubmitted && onSubmitScore && (
+            <div className="mb-6">
+              <input
+                type="text"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+                onKeyDown={(e) => e.stopPropagation()}
+                onKeyUp={(e) => e.stopPropagation()}
+                placeholder="Enter your name"
+                className="w-full px-4 py-2 rounded-lg mb-2 bg-white text-gray-800"
+                maxLength={20}
+              />
+              <button
+                onClick={handleSubmit}
+                disabled={!playerName.trim()}
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold py-2 px-4 rounded-lg transition mb-2"
+              >
+                Submit Score
+              </button>
+            </div>
+          )}
 
           <div className="space-y-3">
             <button

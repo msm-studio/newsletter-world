@@ -614,6 +614,7 @@ export default function Game() {
           onRestart={handleGameOverRestart}
           onRestartGame={handleRestartGame}
           onMainMenu={handleMainMenu}
+          onSubmitScore={handleSubmitScore}
           isFirstLevel={selectedLevelIndex === 0}
         />
       </div>
