@@ -34,7 +34,7 @@ export default function Leaderboard({ entries }: LeaderboardProps) {
               index === 0
                 ? 'bg-yellow-700 bg-opacity-80 border-2 border-yellow-400'
                 : index === 1
-                ? 'bg-gray-700 bg-opacity-80 border-2 border-gray-400'
+                ? 'bg-slate-600 bg-opacity-90 border-2 border-slate-300'
                 : index === 2
                 ? 'bg-orange-800 bg-opacity-80 border-2 border-orange-500'
                 : 'bg-gray-800 bg-opacity-80'
