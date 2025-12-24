@@ -72,6 +72,16 @@ export default function Game() {
     }
   }, [selectedLevelIndex]);
 
+  // Re-sync emailSubmitted state from localStorage when returning to character select
+  useEffect(() => {
+    if (gameState === 'character-select' && typeof window !== 'undefined') {
+      const storedEmailSubmitted = localStorage.getItem('newsletter-world-email-submitted') === 'true';
+      if (storedEmailSubmitted !== emailSubmitted) {
+        setEmailSubmitted(storedEmailSubmitted);
+      }
+    }
+  }, [gameState, emailSubmitted]);
+
   useEffect(() => {
     loadGameData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
