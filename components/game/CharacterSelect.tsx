@@ -59,13 +59,13 @@ export default function CharacterSelect({
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-400 to-orange-300 flex flex-col items-center justify-start p-8 py-12">
       <div className="text-center mb-8">
-        <h1 className="text-7xl font-[family-name:var(--font-bungee)] text-white mb-4 drop-shadow-lg">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-[family-name:var(--font-bungee)] text-white mb-4 drop-shadow-lg">
           Newsletter Enthusiast
         </h1>
-        <p className="text-3xl text-white drop-shadow font-bold">Deliver them all!</p>
+        <p className="text-xl md:text-2xl lg:text-3xl text-white drop-shadow font-bold">Deliver them all!</p>
       </div>
 
-      <h2 className="text-3xl font-bold text-white mb-6 text-center drop-shadow-lg">
+      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 text-center drop-shadow-lg">
         Select Your Character
       </h2>
 
