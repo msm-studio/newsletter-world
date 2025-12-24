@@ -13,6 +13,7 @@ interface CharacterSelectProps {
   unlockedLevelIndex: number;
   onLevelSelect: (index: number) => void;
   isDevMode: boolean;
+  emailSubmitted: boolean;
 }
 
 const characterColors: Record<string, string> = {
@@ -38,6 +39,7 @@ export default function CharacterSelect({
   unlockedLevelIndex,
   onLevelSelect,
   isDevMode,
+  emailSubmitted,
 }: CharacterSelectProps) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
@@ -85,8 +87,8 @@ export default function CharacterSelect({
         ))}
       </div>
 
-      {/* Level Selector (Testing Mode - Only visible in dev mode) */}
-      {isDevMode && levels.length > 0 && (
+      {/* Level Selector (Visible in dev mode or after email registration) */}
+      {(isDevMode || emailSubmitted) && levels.length > 0 && (
         <div className="mb-8 bg-gray-800 bg-opacity-90 backdrop-blur rounded-2xl p-6 max-w-2xl border-2 border-yellow-400">
           <h2 className="text-2xl font-bold text-yellow-400 mb-4 text-center">
             Select Level

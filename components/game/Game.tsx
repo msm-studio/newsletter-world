@@ -252,7 +252,7 @@ export default function Game() {
   };
 
   const handleGameOverRestart = () => {
-    // Reset lives and restart the current level from scratch
+    // Reset lives and restart from Level 1
     setLives(5);
     setBaseScore(0);
     setCoinsCollected(0);
@@ -261,6 +261,8 @@ export default function Game() {
     setMaxCombo(0);
     setTotalCoinsCollected(0);
     setAllCoinsCollected(false);
+    setSelectedLevelIndex(0); // Reset to Level 1
+    setCurrentLevel(levels[0]); // Reset to Level 1
     setGameState('playing');
   };
 
@@ -296,6 +298,8 @@ export default function Game() {
     setBaseScore(0); // Reset base score when returning to main menu
     setTotalCoinsCollected(0); // Reset total coins collected
     setAllCoinsCollected(false); // Reset all coins bonus flag
+    setSelectedLevelIndex(0); // Reset to Level 1
+    setCurrentLevel(levels[0]); // Reset to Level 1
     // Reload leaderboard to show any new scores
     try {
       const topScoresData = await getTopScores(5);
@@ -305,7 +309,7 @@ export default function Game() {
       // Continue to character select even if leaderboard fails
     }
     setGameState('character-select');
-  }, []);
+  }, [levels]);
 
   // Q key to quit on desktop
   useEffect(() => {
@@ -333,6 +337,9 @@ export default function Game() {
   };
 
   const handleNextLevel = useCallback(async () => {
+    // Check if we just beat Level 1 BEFORE incrementing
+    const justBeatLevel1 = selectedLevelIndex === 0;
+
     // Save current score as the base score for the next level
     setBaseScore(score);
 
@@ -363,7 +370,7 @@ export default function Game() {
     }
 
     // Show email gate after Level 1 if not already submitted (and not in dev mode)
-    if (selectedLevelIndex === 0 && !emailSubmitted && !isDevMode) {
+    if (justBeatLevel1 && !emailSubmitted && !isDevMode) {
       setGameState('email-gate');
     } else {
       // Go directly to playing the next level with the same character
@@ -445,9 +452,10 @@ export default function Game() {
       console.warn('⚠️ Lead saved to webhook but database insert failed');
     }
 
-    // Mark as submitted and continue to next level
+    // Mark as submitted and unlock all levels
     localStorage.setItem('newsletter-world-email-submitted', 'true');
     setEmailSubmitted(true);
+    setUnlockedLevelIndex(levels.length - 1); // Unlock all levels after registration
     setGameState('playing');
   };
 
@@ -470,6 +478,7 @@ export default function Game() {
         unlockedLevelIndex={unlockedLevelIndex}
         onLevelSelect={handleLevelSelect}
         isDevMode={isDevMode}
+        emailSubmitted={emailSubmitted}
       />
     );
   }
